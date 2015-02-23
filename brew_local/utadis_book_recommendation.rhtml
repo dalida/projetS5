@@ -1,0 +1,112 @@
+<%
+
+# use library MCDA
+
+library(MCDA)
+
+# set working directory
+
+#setwd("/Users/lstilo/Sites/projet_s5")
+#dir <- getwd()
+#print(dir)
+setwd("../projet_s5")
+
+# GET parameter from input
+
+year = ifelse(is.null(GET$year),'',GET$year)
+number_of_pages = ifelse(is.null(GET$number_of_pages),'',GET$number_of_pages)
+
+if (year!=''&&number_of_pages!='') {
+
+%>
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="src/jquery.mobile-1.4.5.min.css">
+<script src="src/jquery-1.11.2.min.js"></script>
+<script src="src/jquery.mobile-1.4.5.min.js"></script>
+</head>
+<body>
+
+<div data-role="page" id="pageone">
+  <div data-role="header">
+    <h1>Recommended Book</h1>
+  </div>
+  
+	<div data-role="main" class="ui-content">
+	
+<%
+# the performance table
+
+readPerformanceTable<-read.table("csv/book_tmp.csv",header=T, row.names = 1, sep=';')
+
+attach(readPerformanceTable)
+
+names(readPerformanceTable)
+
+performanceTable<-readPerformanceTable
+
+performanceTable$category=NULL
+
+# ranks of the alternatives
+
+alternativesAssignments<-as.character(category)
+
+names(alternativesAssignments)=rownames(readPerformanceTable)
+
+# criteria to minimize or maximize
+
+criteriaMinMax <- c(year,number_of_pages,"min")
+
+names(criteriaMinMax) <- colnames(performanceTable)
+
+# number of break points for each criterion
+
+criteriaNumberOfBreakPoints <- c(3,4,4)
+
+names(criteriaNumberOfBreakPoints) <- colnames(performanceTable)
+
+# ranks of the categories
+
+categoriesRanks <- c(1,2,3)
+
+names(categoriesRanks) <- c("good","medium","bad")
+
+x<-UTADIS(performanceTable, criteriaMinMax, criteriaNumberOfBreakPoints, alternativesAssignments, categoriesRanks,0.1)
+
+# lower bounds categories
+
+lb <- as.vector(x$categoriesLBs)
+
+# Separation class (good and medium)
+
+goodClass <- which(x$overallValues>=lb[1])
+mediumClass <- which(x$overallValues<lb[1] & x$overallValues>=lb[2])
+badClass <- which(x$overallValues<lb[2])
+
+resultGoodClass <- names(goodClass)
+resultMediumClass <- names(mediumClass)
+resultBadClass <- names(badClass)
+
+write.csv(resultGoodClass, file = "csv/good_class.csv", row.names=FALSE, col.names=FALSE)
+write.csv(resultMediumClass, file = "csv/medium_class.csv", row.names=FALSE, col.names=FALSE)
+write.csv(resultBadClass, file = "csv/bad_class.csv", row.names=FALSE, col.names=FALSE)
+
+%>
+		 <p><strong>Good Category : </strong><%cat(resultGoodClass, sep=" --- ")%></p>
+		<br>
+		<p><strong>Medium Category : </strong><%cat(resultMediumClass, sep=" --- ")%></p>
+		<br>
+		<p><strong>Bad Category : </strong><%cat(resultBadClass, sep=" --- ")%></p>
+		<br><br>
+		<a href="book_recommendation.php" class="ui-btn ui-btn-inline ui-shadow ui-corner-all" rel="external">Try Again</a>
+	</div>
+</div>
+
+</body>
+</html>
+<%
+}
+%>	

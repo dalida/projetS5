@@ -1,0 +1,101 @@
+===============
+LOG DEVELOPMENT
+===============
+
+-----------
+13/02/2014
+-----------
+
+- Create directory /csv and change the directory permission to _www
+
+	- chmod 777 /csv
+
+	
+
+- Set privillege to user_s5 (GRANT ALL)
+
+
+
+- Create mysql table : book_tmp
+		
+	CREATE TABLE IF NOT EXISTS `book_tmp` (
+	  `IdBook` int(11) NOT NULL,
+	  `title` varchar(500) DEFAULT NULL,
+	  `language` varchar(100) DEFAULT NULL,
+	  `year` varchar(100) DEFAULT NULL,
+	  `editor` varchar(100) DEFAULT NULL,
+	  `pageNumber` varchar(500) DEFAULT NULL,
+	  `author` varchar(100) DEFAULT NULL,
+	  `genre` varchar(100) DEFAULT NULL,
+	  `genreNumeric` int(11) NOT NULL,
+	  `category` varchar(100) DEFAULT NULL,
+	  PRIMARY KEY (`IdBook`)
+	) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+
+- Create file :
+	- connection.php
+	- /src/*
+
+		- Modify 
+			- /src
+				- filter.js (support 3 select filters)
+			- connection.inc.php (support mysql UTF-8 translation)
+
+		- Add file
+			- /src
+				- jquery.mobile-1.4.5.min.map
+			- /images
+				- ajax-loader.gif
+
+	- book_recommendation.php (interface of book recommender system)
+	- process_book_recommendation.php (next process after book_recommendation.php)
+	- recommendation.php (next process after proces_book_recommendation.php)
+	- flush_data.php
+	- ../brew_local/
+		- utadis_book_recommendation.rhtml
+
+
+
+- SQL to create csv file automaticly
+
+	(SELECT 'title','year','pageNumber','genreNumeric')
+	UNION 
+	(SELECT title,year,pageNumber,genreNumeric
+	FROM book_tmp
+	INTO OUTFILE '/Users/romyardianto/Sites/projet_s5/csv/book_tmp.csv'
+	CHARACTER SET utf8
+	FIELDS ENCLOSED BY '"' TERMINATED BY ';' ESCAPED BY '"'
+	LINES TERMINATED BY '\r\n')
+
+
+
+- SQL to check duplicate values of title
+
+	SELECT title, COUNT(*) as count
+	FROM book
+	GROUP BY title
+	HAVING COUNT(*) > 1
+
+
+
+- SQL to delete duplicate values of title
+
+	 DELETE n1 FROM book n1, book n2 WHERE n1.title = n2.title AND ((n1.IdBook < n2.IdBook) OR (n1.year < n2.year))
+
+
+
+
+-----------
+17/02/2014
+-----------
+
+- Modified base directory (auto detect)
+
+	- connection.inc.php
+
+
+* NOTE
+--------
+

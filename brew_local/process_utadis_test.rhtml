@@ -1,0 +1,93 @@
+<%
+
+# use library MCDA
+
+library(MCDA)
+
+# POST parameter from input
+
+rer = ifelse(is.null(POST$rer),'',POST$rer)
+metro1 = ifelse(is.null(POST$metro1),'',POST$metro1)
+metro2 = ifelse(is.null(POST$metro2),'',POST$metro2)
+bus = ifelse(is.null(POST$bus),'',POST$bus)
+taxi = ifelse(is.null(POST$taxi),'',POST$taxi)
+price = ifelse(is.null(POST$price),'',POST$price)
+time = ifelse(is.null(POST$time),'',POST$time)
+comfort = ifelse(is.null(POST$comfort),'',POST$comfort)
+%>
+<html>
+<head>
+	<title>UTADIS Test Result</title>
+</head>
+<body>
+
+<%if (rer!=''&&metro1!=''&&metro2!=''&&bus!=''&&taxi!=''&&price!=''&&time!=''&&comfort!='') {
+
+# the performance table
+
+performanceTable <- rbind(
+  c(3,10,1),
+  c(4,20,2),
+  c(2,20,0),
+  c(6,40,0),
+  c(30,30,3))
+
+rownames(performanceTable) <- c("RER","METRO1","METRO2","BUS","TAXI")
+
+colnames(performanceTable) <- c("Price","Time","Comfort")
+
+# ranks of the alternatives
+
+alternativesAssignments <- c(rer,metro1,metro2,bus,taxi)
+
+names(alternativesAssignments) <- row.names(performanceTable)
+
+# criteria to minimize or maximize
+
+criteriaMinMax <- c(price,time,comfort)
+
+names(criteriaMinMax) <- colnames(performanceTable)
+
+# number of break points for each criterion
+
+criteriaNumberOfBreakPoints <- c(3,4,4)
+
+names(criteriaNumberOfBreakPoints) <- colnames(performanceTable)
+
+# ranks of the categories
+
+categoriesRanks <- c(1,2,3)
+
+names(categoriesRanks) <- c("good","medium","bad")
+
+# UTADIS function
+
+x <- UTADIS(performanceTable, criteriaMinMax, criteriaNumberOfBreakPoints, alternativesAssignments, categoriesRanks,0.1)
+
+# lower bounds categories
+
+lb <- as.vector(x$categoriesLBs)
+
+# Separation class (good and medium)
+
+goodClass <- which(x$overallValues>=lb[1])
+mediumClass <- which(x$overallValues<lb[1] & x$overallValues>=lb[2])
+badClass <- which(x$overallValues<lb[2])
+
+resultGoodClass <- names(goodClass)
+resultMediumClas <- names(mediumClass)
+resultBadClas <- names(badClass)
+
+%>
+
+<strong>UTADIS Test Result</strong><br><br>
+
+Good Class : <%=resultGoodClass%>
+<br>
+Medium Class : <%=resultMediumClas%>
+<br>
+Bad Class : <%=resultBadClas%>
+<%}%>
+
+</body>
+</html>
