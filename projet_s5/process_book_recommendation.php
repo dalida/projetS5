@@ -2,6 +2,7 @@
 
 /**
  * @Author : Romy Ardianto (romy_thedoctor46@yahoo.com)
+ *           MALIPHOL add additional criteria
  *
  */
 
@@ -35,7 +36,7 @@ if($genre_1 != "" && $genre_2 != "" && $genre_3 != "" ) {
   	<form id="bookFormProcess" method="post" action="recommendation.php">
     <fieldset class="ui-field-contain">
 
-  	<p><strong>Please rate preference of at least one book per category - Good, Medium, Bad (must have a minimum of two different categories)</strong></p>
+  	<p><strong>Please rate preferences of at least one book per category - Good, Medium, Bad (must have a minimum of two different categories)</strong></p>
 
   	<?php
 
@@ -57,6 +58,8 @@ if($genre_1 != "" && $genre_2 != "" && $genre_3 != "" ) {
             	<th>Book Title</th>
 		<th>Author</th>
             	<th>Genre</th>
+            	<th>Year</th>
+                <th>No. Pgs</th>
             	<th>Preference Category</th>
           </tr>
       	</thead>
@@ -103,9 +106,11 @@ if($genre_1 != "" && $genre_2 != "" && $genre_3 != "" ) {
 
       <tr>
         <td><?php echo ($i+1); ?></td>
-        <td><?php echo $title; ?></td>
-        <td><?php echo $author; ?></td>
-        <td><?php echo $genre." - ".$genreName; ?></td>
+        <td class="bookListCol1"><?php echo $title; ?></td>
+        <td class="bookListCol2"><?php echo $author; ?></td>
+        <td class="bookListCol2"><?php echo $genre." - ".$genreName; ?></td>
+        <td><?php echo $year; ?></td>
+        <td><?php echo $pageNumber; ?></td>
         <td>
           <fieldset data-role="controlgroup" data-mini="true" data-type="horizontal">
             <label for="good_<?php echo $idBook; ?>">Good</label>
