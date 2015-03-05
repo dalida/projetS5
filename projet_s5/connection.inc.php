@@ -1,10 +1,11 @@
 <?php
 
 /**
- * @Author : Romy Ardianto (romy_thedoctor46@yahoo.com)
+ * @Author : 
+ Romy Ardianto (romy.ardianto@telecom-bretagne.eu)
+ Lisa Maliphol (lisa.maliphol@telecom-bretagne.eu)
  *
- */
- 
+ */ 
 // be sure that this file not accessed directly
 if (basename($_SERVER['PHP_SELF']) == basename(__FILE__)) {
     die();

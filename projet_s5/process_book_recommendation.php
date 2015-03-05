@@ -1,8 +1,9 @@
 <?php
 
 /**
- * @Author : Romy Ardianto (romy_thedoctor46@yahoo.com)
- *           MALIPHOL add additional criteria
+ * @Author : 
+ Romy Ardianto (romy.ardianto@telecom-bretagne.eu)
+ Lisa Maliphol (lisa.maliphol@telecom-bretagne.eu)
  *
  */
 
