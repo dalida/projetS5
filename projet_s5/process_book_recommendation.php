@@ -138,7 +138,7 @@ if($genre_1 != "" && $genre_2 != "" && $genre_3 != "" ) {
 
       <br><br>
 
-      <p><strong>Please select criteria preferences</strong></p>
+      <p><strong>Please select criteria preferences (required)</strong></p>
 
       <fieldset data-role="controlgroup" data-mini="true" data-type="horizontal">
           <legend>Year:</legend>
