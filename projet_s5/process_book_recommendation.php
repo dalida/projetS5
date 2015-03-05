@@ -37,7 +37,7 @@ if($genre_1 != "" && $genre_2 != "" && $genre_3 != "" ) {
   	<form id="bookFormProcess" method="post" action="recommendation.php">
     <fieldset class="ui-field-contain">
 
-  	<p><strong>Please rate preferences of at least one book per category - Good, Medium, Bad (must have a minimum of two different categories)</strong></p>
+  	<p><strong>Please rate preferences of at least one book per category - Good, Medium, Bad (must have a minimum of two different preference categories)</strong></p>
 
   	<?php
 
